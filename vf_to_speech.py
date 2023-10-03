@@ -27,9 +27,6 @@ with open('output.mp3', 'wb') as f:
         if chunk:
             f.write(chunk)
 
-os.environ['AWS_ACCESS_KEY_ID'] = 'AKIAVNQ6Q2RU6CGF3FFR'
-os.environ['AWS_SECRET_ACCESS_KEY'] = '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'
-
 s3=boto3.client('s3')
 with open("output.mp3", "rb") as f:
     s3.upload_fileobj(f, 'vf-coaching-app', 'output.mp3')
