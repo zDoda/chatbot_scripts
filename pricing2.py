@@ -1,4 +1,5 @@
 
+
 pricing_dir = {
     "fixe" : {
         'TP' : [1.30, 2.36],
@@ -46,54 +47,6 @@ pricing_dir = {
     "porte_coulissante" : {
         'S' : [9.82, 17.85],
         'D' : [9.82, 28.66]
-    },
-    "vider_les_gouttiere" : {
-        'Facile' : 2.26,
-        'Moyen' : 3.36,
-        'Difficile' : 4.67
-    },
-    "laver_soffites": 4.73,
-    "installation_de_plaques": 13.86,
-    "ampoules" : {
-        "rdc" : 3.68,
-        "etage" : 7.35
-    },
-    "nettoyage_de_lumiere" : 10.50,
-    "lavage_a_pression": {
-        "sols": {
-            "asphalte": .26,
-            "beton": .16
-        },
-        "murs": .13,
-        "bois": {
-            'sols': .42,
-            'cloture': .42,
-            'escalier': .42,
-            'rampes': 3.15
-        },
-        "pave_seulment": .58,
-        "pave_sable_g": 1.42,
-        "pave_sable_p": 1.68
-    },
-    "nettoyage_de_murs": {
-        'P': 47.25,
-        'M': 63.00,
-        'G': 89.25
-    },
-    "nettoyage_de_stores": {
-        'P': 15.75,
-        'M': 21.00,
-        'G': 26.25
-    },
-    "travaux_vip_heure": 126.00,
-    "tax": {
-        'tps': 0.05,
-        'tvq': 0.09975
-    },
-    "multi": {
-        "Base": 0.8,
-        "Premium": 1.5,
-        "Contruction": 2.0
     }
 }
 
@@ -132,25 +85,6 @@ P,M,G
 
 Porte coulissante paire de vitres
 S,D
-
-Vider les gouttière(m)
-Facile,Moyen,Difficile
-
-Laver soffites et alumium(m)
-Installation de Plaques
-
-Ampoules
-RDC,Etage
-
-Nettoyage de lumiere
-Lavage a pression (pied2)
-Sols,Asphalte,Beton,Murs,Bois,Sol,Cloture,Escalier(u),Rampes(P),
-Pave seulment,
-Pave+sable (G),
-pave+sable (P),
-Nettoyage de murs,
-Nettoyage de stores
-Travaux VIP/Heure
 
 Chaque Catégorie JSON:
 {
@@ -200,44 +134,4 @@ Chaque Catégorie JSON:
     "porte_coulissante" : {
         "S" : 0,
         "D" : 0
-    },
-    "vider_les_gouttiere" : {
-        "Facile": 0,
-        "Moyen": 0,
-        "Difficile": 0
-    },
-    "laver_soffites": 0,
-    "installation_de_plaques": 0,
-    "ampoules" : {
-        "rdc" : 0,
-        "etage" : 0
-    },
-    "nettoyage_de_lumiere" : 0,
-    "lavage_a_pression": {
-        "sols": {
-            "asphalte": 0,
-            "beton": 0
-        },
-        "murs": 0,
-        "bois": {
-            "sols": 0,
-            "cloture": 0,
-            "escalier": 0,
-            "rampes": 0
-        }3.5-turbo,
-        "pave_seulment": 0,
-        "pave_sable_g": 0,
-        "pave_sable_p": 0
-    },
-    "nettoyage_de_murs": {
-        "P": 0,
-        "M": 0,
-        "G": 0
-    },
-    "nettoyage_de_stores": {
-        "P": 0,
-        "M": 0,
-        "G": 0
-    },
-    "travaux_vip_heure": 0
-}"""
+    }}"""
