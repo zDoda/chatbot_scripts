@@ -1,40 +1,35 @@
-import requests
-import os
-import pvleopard
+from flask import Flask, request
+from twilio_api import send_message
+from open_api import transcript_audio
 
 #Whatsapp
+app = Flask(__name__)
+@app.route('/whatsapp', methods=['POST'])
+def twilio():
+    try:
+        data = request.form.to_dict()
+        print(data)
+        query = data['Body']
+        sender_id = data['From']
+        print(f'Sender id - {sender_id}')
+        # TODO
+        if 'MediaUrl0' in data.keys():
+            transcript = transcript_audio(data['MediaUrl0'])
+            if transcript['status'] == 1:
+                print(f'Query - {transcript["transcript"]}')
+                send_message(sender_id, f'Query - {transcript["transcript"]}')
+                #response = chat_completion(transcript['transcript'])
+            else:
+                print("error")
+        else:
+            print(f'Query - {query}')
+            #response = chat_completion(query)
+        #print(f'Response - {response}')
+        #print('Message sent.')
+    except Exception as e:
+        print(e)
 
+    return 'OK', 200
 
-#PicoVoice
-def get_audio_data():
-    #getting data
-    return "/home/czook/Downloads/onlymp2.to_-_1_ScrappyKimberly_In_Search_of_Excrement_Fixing_the_Toxic_Dysfunctional_Crap_in_Organizations-6MF98fakM6A-192k-1694458120.mp3"
-
-leopard = pvleopard.create(access_key=os.environ['PICO_API_KEY'])
-
-transcript, words = leopard.process_file(get_audio_data())
-print(transcript)
-for word in words:
-    print(
-      "{word=\"%s\" start_sec=%.1f end_sec=%.2f confidence=%.2f}"
-      % (word.word, word.start_sec, word.end_sec, word.confidence))
-
-leopard.delete()
-#Voiceflow
-
-# api_key = os.environ['VF_API_KEY']
-# user_id = "user_122"  # Unique ID used to track conversation state
-# user_input = ""   # User's message to your Voiceflow assistant
-#
-# body = {"action": {"type": "text", "payload": "Hello world!"}}
-#
-# # Start a conversation
-# response = requests.post(
-#     f"https://general-runtime.voiceflow.com/state/user/{user_id}/interact",
-#     json=body,
-#     headers={"Authorization": api_key},
-# )
-#
-# # Log the response
-# print(response.json())
-
+if __name__ == "__main__":
+    app.run(debug=True)
