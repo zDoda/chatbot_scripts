@@ -1,5 +1,5 @@
 from flask import Flask, request
-from twilio_api import send_message
+from twilio_api import send_message, send_audio_message
 from open_api import transcript_audio
 from voiceflow_api import send_vf_msg
 #Whatsapp
@@ -26,7 +26,7 @@ def twilio():
         else:
             print(f'Query - {query}')
             response,senders = send_vf_msg(query, sender_id, senders)
-            send_message(sender_id, response)
+            send_audio_message(sender_id, response)
 
         print('Message sent.')
         print(f'Response - {response}')
