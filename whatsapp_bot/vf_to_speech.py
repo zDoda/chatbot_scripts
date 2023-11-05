@@ -4,7 +4,7 @@ from twilio.rest import Client
 import boto3
 from pydub import AudioSegment
 #import shutil
-CHUNK_SIZE = 1024
+CHUNK_SIZE = 102 
 url = "https://api.elevenlabs.io/v1/text-to-speech/21m00Tcm4TlvDq8ikWAM"
 
 headers = {

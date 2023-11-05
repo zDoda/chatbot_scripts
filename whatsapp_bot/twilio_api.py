@@ -19,7 +19,7 @@ def send_message(to: str, message: str) -> None:
     '''
 
     _ = client.messages.create(
-        from_='whatsapp:+14155238886',
+        from_='whatsapp:+18447469113',
         body=message,
         to=to
     )
@@ -31,12 +31,12 @@ def send_audio_message(to: str, message: str) -> None:
     Send message to a whatsapp user.
     Parameters:
         - to(str): sender whatsapp number in this whatsapp:+919558515995 form
-        - message(str): text message to send
+        - fessage(str): text message to send
     Returns:
         - None
     '''
     CHUNK_SIZE = 1024
-    url = "https://api.elevenlabs.io/v1/text-to-speech/21m00Tcm4TlvDq8ikWAM"
+    url = "https://api.elevenlabs.io/v1/text-to-speech/I6ug5epEXF0LpaHEqxFY"
 
     headers = {
       "Accept": "audio/mpeg",
@@ -59,19 +59,19 @@ def send_audio_message(to: str, message: str) -> None:
             if chunk:
                 f.write(chunk)
 
-    # Load the MP3 file
+    #Load the MP3 file
     mp3_file = AudioSegment.from_file("output.mp3", format="mp3")
 
     # Convert to OGG format
     mp3_file.export("output.ogg", format="ogg", codec="libopus")
+    # Modify the S3 object's metadata (e.g., Content-Type) here
+    s3 = boto3.client('s3')
 
-    s3=boto3.client('s3')
-    with open("output.ogg", "rb") as f:
-        s3.upload_fileobj(f, 'vf-coaching-app', 'output.ogg')
-
+    object_name = os.path.basename('output.ogg')
+    s3.upload_file('output.ogg', 'vf-coaching-app', object_name, ExtraArgs={'ContentType': "audio/ogg"})
+    print("done uploading")
     _ = client.messages.create(
-        from_='whatsapp:+14155238886',
-        media_url=['https://vf-coaching-app.s3.us-east-2.amazonaws.com/output.ogg'],
-        body=message,
+        media_url=['http://vf-coaching-app.s3.us-east-2.amazonaws.com/output.ogg'],
+        from_='whatsapp:+18447469113',
         to=to
     )
