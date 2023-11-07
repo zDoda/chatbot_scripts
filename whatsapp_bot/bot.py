@@ -76,6 +76,8 @@ def new_user(sender_id: str, query: str):
             send_message(sender_id, "You have chosen voice-notes, feel free to text or record a voicenote any questions to me")
         else:
             send_message(sender_id, "You have chosen text, feel free to text or record a voicenote any questions to me")
+        response,senders = send_vf_msg('', sender_id, senders)
+        send_message(sender_id, response)
 
 if __name__ == "__main__":
     app.run(debug=True)
