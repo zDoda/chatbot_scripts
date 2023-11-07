@@ -49,6 +49,7 @@ def twilio():
     return 'OK', 200
 
 def new_user(sender_id: str, query: str):
+    global senders
     senders[sender_id]['setup'] = True
     if 'botSetup' not in senders[sender_id]:
         senders[sender_id]['botSetup'] = True
