@@ -2,6 +2,7 @@ from flask import Flask, request
 from twilio_api import send_message, send_audio_message
 from open_api import transcript_audio
 from voiceflow_api import send_vf_msg
+import time
 #Whatsapp
 app = Flask(__name__)
 senders = {}
@@ -20,12 +21,21 @@ def twilio():
                 new_user(sender_id, query)
             else:
                 if 'MediaUrl0' in data.keys():
+                    start_time = time.time()
                     transcript = transcript_audio(data['MediaUrl0'])
+                    end_time = time.time()
+                    print(f'Transcript_audio = {start_time - end_time}')
                     if transcript['status'] == 1:
                         print(f'Query - {transcript["transcript"]}')
+                        start_time = time.time()
                         response,senders = send_vf_msg(transcript['transcript'], sender_id, senders)
+                        end_time = time.time()
+                        print(f'Transcript_audio = {start_time - end_time}')
                         if senders[sender_id]['botOption']:
+                            start_time = time.time()
                             send_audio_message(sender_id, response)
+                            end_time = time.time()
+                            print(f'Transcript_audio = {start_time - end_time}')
                         else:
                             send_message(sender_id, response)
                     else:
