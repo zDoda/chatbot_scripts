@@ -1,1 +1,9 @@
-flask twilio openai requests uuid soundfile boto3 pydub numpy
+flask
+twilio
+openai
+requests
+uuid
+soundfile
+boto3
+pydub
+numpy 
