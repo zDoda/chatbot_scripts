@@ -1,6 +1,6 @@
 from flask import Flask, request
 from twilio_api import send_message, send_audio_message
-from open_api import transcript_audio
+from open_api import transcript_audio, new_chat_thread, assistant_send_chat
 from voiceflow_api import send_vf_msg
 import time
 #Whatsapp
@@ -21,28 +21,22 @@ def twilio():
                 new_user(sender_id, query)
             else:
                 if 'MediaUrl0' in data.keys():
-                    start_time = time.time()
                     transcript = transcript_audio(data['MediaUrl0'])
-                    end_time = time.time()
-                    print(f'Transcript_audio = {start_time - end_time}')
                     if transcript['status'] == 1:
-                        print(f'Query - {transcript["transcript"]}')
-                        start_time = time.time()
-                        response,senders = send_vf_msg(transcript['transcript'], sender_id, senders)
-                        end_time = time.time()
-                        print(f'Transcript_audio = {start_time - end_time}')
+                        #response,senders = send_vf_msg(transcript['transcript'], sender_id, senders)
+                        response = assistant_send_chat(transcript['transcript'], sender_id, senders)
+                        print(response)
                         if senders[sender_id]['botOption']:
-                            start_time = time.time()
                             send_audio_message(sender_id, response)
-                            end_time = time.time()
-                            print(f'Transcript_audio = {start_time - end_time}')
                         else:
                             send_message(sender_id, response)
                     else:
                         print("error")
                 else:
                     print(f'Query - {query}')
-                    response,senders = send_vf_msg(query, sender_id, senders)
+                    #response,senders = send_vf_msg(query, sender_id, senders)
+                    response = assistant_send_chat(query, sender_id, senders)
+                    print(response)
                     if senders[sender_id]['botOption']:
                         send_audio_message(sender_id, response)
                     else:
@@ -87,8 +81,9 @@ def new_user(sender_id: str, query: str):
             send_message(sender_id, "You have chosen voice-notes, feel free to text or record a voicenote any questions to me")
         else:
             send_message(sender_id, "You have chosen text, feel free to text or record a voicenote any questions to me")
-        response,senders = send_vf_msg('', sender_id, senders)
-        send_message(sender_id, response)
+        #response,senders = send_vf_msg('', sender_id, senders)
+        senders = new_chat_thread(senders, sender_id)
+        #send_message(sender_id, response)
 
 if __name__ == "__main__":
     app.run(debug=True)
