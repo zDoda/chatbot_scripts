@@ -19,8 +19,8 @@ def send_message(to: str, message: str) -> None:
     '''
 
     _ = client.messages.create(
-        from_='whatsapp:+14155238886', #twilio sandbox
-#        from_='whatsapp:+18447469113',
+        #from_='whatsapp:+14155238886', #twilio sandbox
+        from_='whatsapp:+18447469113',
         body=message,
         to=to
     )
@@ -89,7 +89,7 @@ def send_audio_message(to: str, message: str) -> None:
     print("done uploading")
     _ = client.messages.create(
         media_url=['http://vf-coaching-app.s3.us-east-2.amazonaws.com/output.ogg'],
-        from_='whatsapp:+14155238886', #twilio sandbox
-        #from_='whatsapp:+18447469113',
+        #from_='whatsapp:+14155238886', #twilio sandbox
+        from_='whatsapp:+18447469113',
         to=to
     )
