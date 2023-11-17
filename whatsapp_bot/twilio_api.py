@@ -25,7 +25,23 @@ def send_message(to: str, message: str) -> None:
         to=to
     )
 
-
+def send_button_message(to: str) -> None:
+    message = {
+    'persistent_action': [
+        {
+            'type': 'reply',
+            'payload': 'audio',
+            'title': 'Voice Notes'
+        }
+    ]
+}
+    _ = client.messages.create(
+        from_='whatsapp:+14155238886', #twilio sandbox
+#        from_='whatsapp:+18447469113',
+        body="How would you like me to respond?",
+        to=to,
+        persistent_action=message['persistent_action']
+    )
 
 def send_audio_message(to: str, message: str) -> None:
     '''
