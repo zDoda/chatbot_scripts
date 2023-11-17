@@ -42,17 +42,17 @@ def transcript_audio(media_url: str) -> dict:
         os.unlink(ogg_file_path)
         os.unlink(mp3_file_path)
         transcript = client.audio.transcriptions.create(
-            'whisper-1', audio_file)
+            model='whisper-1', file=audio_file)
         return {
             'status': 1,
-            'transcript': transcript['text']
+            'transcript': transcript.model_dump()['text']
         }
     except Exception as e:
         print('Error at transcript_audio...')
         print(e)
         return {
             'status': 0,
-            'transcript': transcript['text']
+            'transcript': transcript.model_dump()['text']
         }
 
 def assistant_send_chat(msg: str,sender_id, senders) -> str:

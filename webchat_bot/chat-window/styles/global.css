@@ -1,0 +1,88 @@
+@import '~antd/dist/antd.css';
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html,
+body,
+#__next {
+  display: flex;
+}
+
+body {
+  background: initial;
+}
+
+#__next {
+  flex: 1;
+  max-height: 100%;
+}
+
+.Mobile {
+  font-size: 16px;
+}
+
+.TextArea--transparent,
+.TextArea--transparent:hover,
+.TextArea--transparent:focus,
+.TextArea--transparent:active {
+  border: none;
+  box-shadow: none;
+  resize: none;
+}
+
+.Text--markdown {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.Text--markdown a {
+  text-decoration: underline;
+}
+
+.Text--markdown p:not(:first-child) {
+  margin-top: 4px;
+}
+
+.Text--markdown pre {
+  white-space: pre-wrap;
+}
+
+.Text--white {
+  color: #fff;
+}
+
+.Text--white > h1,
+.Text--white > h2,
+.Text--white > h3,
+.Text--white > h4,
+.Text--white > h5,
+.Text--white > h6,
+.Text--white a {
+  color: #fff;
+}
+
+.CloseIcon {
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+.CloseIcon:hover {
+  opacity: 1;
+}

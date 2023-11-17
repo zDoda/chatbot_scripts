@@ -32,7 +32,7 @@ def twilio():
         query = data['Body']
         sender_id = data['From']
         print(f'Sender id - {sender_id}')
-        payload = ""
+#        payload = ""
 #        try:
 #            payload = data['Message']['persistent_action']['payload']
 #        except Exception as ex:
