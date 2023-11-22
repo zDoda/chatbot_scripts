@@ -55,28 +55,34 @@ def transcript_audio(media_url: str) -> dict:
             'transcript': transcript.model_dump()['text']
         }
 
-def assistant_send_chat(msg: str,sender_id, senders) -> str:
-    message = client.beta.threads.messages.create(
+def assistant_send_chat(msg: str,sender_id: str, senders: dict) -> str:
+    _ = client.beta.threads.messages.create(
         thread_id=senders[sender_id]['thread'],
         role="user",
         content=msg
     )
+
     run = client.beta.threads.runs.create(
         thread_id=senders[sender_id]['thread'],
         assistant_id=assistant_id
     )
+
     run = wait_on_run(run,senders[sender_id]['thread'])
     response = ""
+
     if run.model_dump()['status'] == 'requires_action':
         function_name = run.model_dump()['required_action']['submit_tool_outputs']['tool_calls'][0]['function']['name']
         tool_id = run.model_dump()['required_action']['submit_tool_outputs']['tool_calls'][0]['id']
+
         if function_name == "clear_chat":
             response = "Chat has been reset"
             new_chat_thread(senders, sender_id)
+
         elif function_name == "change_response_option":
             if senders[sender_id]['botOption']:
                 senders[sender_id]['botOption'] = False
                 response = "I am now responding with text"
+
             else:
                 senders[sender_id]['botOption'] = True
                 response = "I am now responding with voice"
@@ -95,12 +101,12 @@ def assistant_send_chat(msg: str,sender_id, senders) -> str:
         response = message_json['data'][0]['content'][0]['text']['value']
     return response
 
-def new_chat_thread(senders, sender_id):
+def new_chat_thread(senders: dict, sender_id: str):
     senders[sender_id]['thread'] = client.beta.threads.create().id
     return senders
 import time
 
-def wait_on_run(run, thread):
+def wait_on_run(run, thread: str):
     while run.status == "queued" or run.status == "in_progress":
         run = client.beta.threads.runs.retrieve(
             thread_id=thread,
