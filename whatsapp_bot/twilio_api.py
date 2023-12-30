@@ -86,7 +86,6 @@ def send_audio_message(to: str, message: str) -> None:
 
     object_name = os.path.basename('output.ogg')
     s3.upload_file('output.ogg', 'vf-coaching-app', object_name, ExtraArgs={'ContentType': "audio/ogg"})
-    print("done uploading")
     _ = client.messages.create(
         media_url=['http://vf-coaching-app.s3.us-east-2.amazonaws.com/output.ogg'],
         #from_='whatsapp:+14155238886', #twilio sandbox

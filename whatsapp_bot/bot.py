@@ -40,7 +40,6 @@ def twilio():
                     transcript = transcript_audio(data['MediaUrl0'])
                     if transcript['status'] == 1:
                         response = assistant_send_chat(transcript['transcript'], sender_id, senders)
-                        print(response)
                         if senders[sender_id]['botOption']:
                             send_audio_message(sender_id, response)
                         else:
@@ -48,9 +47,7 @@ def twilio():
                     else:
                         print("error")
                 else:
-                    print(f'Query - {query}')
                     response = assistant_send_chat(query, sender_id, senders)
-                    print(response)
                     if senders[sender_id]['botOption']:
                         send_audio_message(sender_id, response)
                     else:
@@ -60,9 +57,7 @@ def twilio():
             senders[sender_id] = {}
             print(f'New Sender')
             new_user(sender_id, query)
-        print('Message sent.')
         senders[sender_id]['messageCount'] += 1
-        print(senders[sender_id]['messageCount'])
         if senders[sender_id]['messageCount']>senders[sender_id]['num_til_next_ad']:
             send_message(sender_id, 'This chatbot is built by Hype Digitaly AI, check us out @ www.hypedigitaly.ai')
             senders[sender_id]['messageCount'] = 0

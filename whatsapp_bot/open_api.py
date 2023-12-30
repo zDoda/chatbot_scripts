@@ -30,23 +30,20 @@ def transcript_audio(media_url: str) -> dict:
     try:
         ogg_file_path = f'{uuid.uuid1()}.ogg'
         data = requests.get(url=media_url, auth=HTTPBasicAuth(account_sid, auth_token))
-        print('1')
         with open(ogg_file_path, 'wb') as file:
             file.write(data.content)
-        print('2')
         audio_data, sample_rate = sf.read(ogg_file_path)
-        print('3')
         mp3_file_path = f'{uuid.uuid1()}.mp3'
         sf.write(mp3_file_path, audio_data, sample_rate)
         audio_file = open(mp3_file_path, 'rb')
         os.unlink(ogg_file_path)
         os.unlink(mp3_file_path)
-        transcript = client.audio.transcriptions.create(
-            model='whisper-1', file=audio_file)
+        transcript = client.audio.transcriptions.create(model='whisper-1', file=audio_file)
         return {
             'status': 1,
             'transcript': transcript.model_dump()['text']
         }
+
     except Exception as e:
         print('Error at transcript_audio...')
         print(e)
@@ -104,7 +101,6 @@ def assistant_send_chat(msg: str,sender_id: str, senders: dict) -> str:
 def new_chat_thread(senders: dict, sender_id: str):
     senders[sender_id]['thread'] = client.beta.threads.create().id
     return senders
-import time
 
 def wait_on_run(run, thread: str):
     while run.status == "queued" or run.status == "in_progress":
@@ -112,5 +108,5 @@ def wait_on_run(run, thread: str):
             thread_id=thread,
             run_id=run.id,
         )
-        time.sleep(0.5)
+        time.sleep(0.25)
     return run
