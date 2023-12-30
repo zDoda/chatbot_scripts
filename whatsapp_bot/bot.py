@@ -3,7 +3,7 @@ from twilio_api import send_message, send_audio_message
 from open_api import transcript_audio, new_chat_thread, assistant_send_chat
 import json
 
-#Whatsapp
+# Whatsapp
 app = Flask(__name__)
 senders = {}
 
@@ -22,6 +22,7 @@ except json.JSONDecodeError as e:
     print(f"Error decoding JSON in '{file_path}': {e}")
 except Exception as ex:
     print(f"An error occurred: {ex}")
+
 
 @app.route('/whatsapp', methods=['POST'])
 def twilio():
@@ -55,10 +56,9 @@ def twilio():
 
         else:
             senders[sender_id] = {}
-            print(f'New Sender')
             new_user(sender_id, query)
         senders[sender_id]['messageCount'] += 1
-        if senders[sender_id]['messageCount']>senders[sender_id]['num_til_next_ad']:
+        if senders[sender_id]['messageCount'] > senders[sender_id]['num_til_next_ad']:
             send_message(sender_id, 'This chatbot is built by Hype Digitaly AI, check us out @ www.hypedigitaly.ai')
             senders[sender_id]['messageCount'] = 0
             senders[sender_id]['num_til_next_ad'] += 10
@@ -66,8 +66,9 @@ def twilio():
     except Exception as e:
         print(e)
     with open('users.json', 'w') as json_file:
-        json.dump(senders,json_file)
+        json.dump(senders, json_file)
     return 'OK', 200
+
 
 def new_user(sender_id: str, query: str):
     global senders
@@ -104,6 +105,6 @@ def new_user(sender_id: str, query: str):
         send_message(sender_id, "You can change change my response setting by asking me to switch")
         senders = new_chat_thread(senders, sender_id)
 
-if __name__ == "__main__":
-    app.run(debug=True)
 
+if __name__ == "__main__":
+    app.run(debug=True, host='0.0.0.0', port=8080)

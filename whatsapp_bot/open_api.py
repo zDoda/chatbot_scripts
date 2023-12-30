@@ -52,7 +52,7 @@ def transcript_audio(media_url: str) -> dict:
             'transcript': transcript.model_dump()['text']
         }
 
-def assistant_send_chat(msg: str,sender_id: str, senders: dict) -> str:
+def assistant_send_chat(msg: str, sender_id: str, senders: dict) -> str:
     _ = client.beta.threads.messages.create(
         thread_id=senders[sender_id]['thread'],
         role="user",
@@ -94,13 +94,14 @@ def assistant_send_chat(msg: str,sender_id: str, senders: dict) -> str:
           thread_id=senders[sender_id]['thread']
         )
         message_json = messages.model_dump()
-        print(message_json['data'][0]['content'])
         response = message_json['data'][0]['content'][0]['text']['value']
     return response
+
 
 def new_chat_thread(senders: dict, sender_id: str):
     senders[sender_id]['thread'] = client.beta.threads.create().id
     return senders
+
 
 def wait_on_run(run, thread: str):
     while run.status == "queued" or run.status == "in_progress":
@@ -108,5 +109,5 @@ def wait_on_run(run, thread: str):
             thread_id=thread,
             run_id=run.id,
         )
-        time.sleep(0.25)
+        time.sleep(0.5)
     return run
