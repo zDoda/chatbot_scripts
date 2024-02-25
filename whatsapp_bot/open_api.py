@@ -5,31 +5,33 @@ from openai import OpenAI
 import requests
 from requests.auth import HTTPBasicAuth
 import soundfile as sf
- 
 account_sid = os.environ['TWILIO_SID']
 auth_token = os.environ['TWILIO_AUTH']
 client = OpenAI()
 client.api_key = os.environ['OPENAI_API_KEY']
 assistant_id = "asst_meYff3tPeBHrBKzHibCDRsQK"
 
+
 def chat_completion(prompt: str) -> str:
     try:
         completion = client.chat.completions.create(
-        model="gpt-3.5-turbo-1106",
-        messages=[
-            {"role": "system", "content": "You are a helpful assistant."},
-            {"role": "user", "content": prompt}
-        ]
+            model="gpt-3.5-turbo-1106",
+            messages=[
+                {"role": "system", "content": "You are a helpful assistant."},
+                {"role": "user", "content": prompt}
+            ]
         )
 
         return completion.choices[0].message.content
     except:
         return "error"
 
+
 def transcript_audio(media_url: str) -> dict:
     try:
         ogg_file_path = f'{uuid.uuid1()}.ogg'
-        data = requests.get(url=media_url, auth=HTTPBasicAuth(account_sid, auth_token))
+        data = requests.get(
+            url=media_url, auth=HTTPBasicAuth(account_sid, auth_token))
         with open(ogg_file_path, 'wb') as file:
             file.write(data.content)
         audio_data, sample_rate = sf.read(ogg_file_path)
@@ -38,7 +40,8 @@ def transcript_audio(media_url: str) -> dict:
         audio_file = open(mp3_file_path, 'rb')
         os.unlink(ogg_file_path)
         os.unlink(mp3_file_path)
-        transcript = client.audio.transcriptions.create(model='whisper-1', file=audio_file)
+        transcript = client.audio.transcriptions.create(
+            model='whisper-1', file=audio_file)
         return {
             'status': 1,
             'transcript': transcript.model_dump()['text']
@@ -52,6 +55,7 @@ def transcript_audio(media_url: str) -> dict:
             'transcript': transcript.model_dump()['text']
         }
 
+
 def assistant_send_chat(msg: str, sender_id: str, senders: dict) -> str:
     _ = client.beta.threads.messages.create(
         thread_id=senders[sender_id]['thread'],
@@ -64,12 +68,14 @@ def assistant_send_chat(msg: str, sender_id: str, senders: dict) -> str:
         assistant_id=assistant_id
     )
 
-    run = wait_on_run(run,senders[sender_id]['thread'])
+    run = wait_on_run(run, senders[sender_id]['thread'])
     response = ""
 
     if run.model_dump()['status'] == 'requires_action':
-        function_name = run.model_dump()['required_action']['submit_tool_outputs']['tool_calls'][0]['function']['name']
-        tool_id = run.model_dump()['required_action']['submit_tool_outputs']['tool_calls'][0]['id']
+        function_name = run.model_dump(
+        )['required_action']['submit_tool_outputs']['tool_calls'][0]['function']['name']
+        tool_id = run.model_dump(
+        )['required_action']['submit_tool_outputs']['tool_calls'][0]['id']
 
         if function_name == "clear_chat":
             response = "Chat has been reset"
@@ -91,7 +97,7 @@ def assistant_send_chat(msg: str, sender_id: str, senders: dict) -> str:
             )
     else:
         messages = client.beta.threads.messages.list(
-          thread_id=senders[sender_id]['thread']
+            thread_id=senders[sender_id]['thread']
         )
         message_json = messages.model_dump()
         response = message_json['data'][0]['content'][0]['text']['value']

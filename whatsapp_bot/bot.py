@@ -1,6 +1,6 @@
-from flask import Flask, request
 from twilio_api import send_message, send_audio_message
 from open_api import transcript_audio, new_chat_thread, assistant_send_chat
+from flask import Flask, request
 import json
 
 # Whatsapp
