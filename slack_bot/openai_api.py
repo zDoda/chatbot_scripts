@@ -4,7 +4,7 @@ from openai import OpenAI
 client = OpenAI()
 client.api_key = os.environ['OPENAI_API_KEY']
 # TODO
-assistant_id = ""
+assistant_id = "asst_ZuM9sbc1LKdFADFYl7IPhZt7"
 
 
 def chat_completion(prompt: str) -> str:
@@ -22,32 +22,48 @@ def chat_completion(prompt: str) -> str:
         return "error"
 
 
-def assistant_send_chat(msg: str, sender_id: str, senders: dict) -> str:
+def openai_json(system_prompt: str, prompt: str) -> str:
+    try:
+        completion = client.chat.completions.create(
+            model="gpt-3.5-turbo-0125",
+            response_format={"type": "json_object"},
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": prompt}
+            ]
+        )
+
+        return completion.choices[0].message.content
+    except:
+        return "error"
+
+
+def assistant_send_chat(msg: str, thread_id: str) -> str:
     _ = client.beta.threads.messages.create(
-        thread_id=senders[sender_id]['thread'],
+        thread_id=thread_id,
         role="user",
         content=msg
     )
 
     run = client.beta.threads.runs.create(
-        thread_id=senders[sender_id]['thread'],
+        thread_id=thread_id,
         assistant_id=assistant_id
     )
 
-    run = wait_on_run(run, senders[sender_id]['thread'])
+    run = wait_on_run(run, thread_id)
     response = ""
 
     messages = client.beta.threads.messages.list(
-        thread_id=senders[sender_id]['thread']
+        thread_id=thread_id
     )
     message_json = messages.model_dump()
     response = message_json['data'][0]['content'][0]['text']['value']
     return response
 
 
-def new_chat_thread(senders: dict, sender_id: str):
-    senders[sender_id]['thread'] = client.beta.threads.create().id
-    return senders
+def new_chat_thread():
+    thread = client.beta.threads.create().id
+    return thread
 
 
 def wait_on_run(run, thread: str):
@@ -90,5 +106,4 @@ def delete_files():
         _id = str(file['id'])
         print(_id)
         client.files.delete(_id)
-
 
