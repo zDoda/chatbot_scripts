@@ -1,0 +1,188 @@
+{
+  "name": "send_estimate",
+  "description": "Gathers required information for providing an estimate for window washing services, including prospect information and service details. This function should be called after collecting all necessary data from the user.",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "prospect_info": {
+        "type": "object",
+        "properties": {
+          "first_name": {
+            "type": "string",
+            "description": "The first name of the prospect."
+          },
+          "last_name": {
+            "type": "string",
+            "description": "The last name of the prospect."
+          },
+          "company_name": {
+            "type": "string",
+            "description": "The prospect's company name"
+          },
+          "email": {
+            "type": "string",
+            "description": "The email address of the prospect."
+          },
+          "phone": {
+            "type": "string",
+            "description": "The phone number of the prospect."
+          },
+          "address": {
+            "type": "string",
+            "description": "The street address of the prospect."
+          },
+          "city": {
+            "type": "string",
+            "description": "The city where the prospect resides."
+          },
+          "state_province": {
+            "type": "string",
+            "description": "The state or province where the prospect resides."
+          },
+          "zipcode": {
+            "type": "string",
+            "description": "The postal code of the prospect's location."
+          }
+        },
+        "required": ["first_name", "last_name", "email", "phone", "address", "city", "state_province", "zipcode"]
+      },
+      "service_details": {
+        "type": "object",
+        "properties": {
+          "fixe": {
+            "type": "object",
+            "properties": {
+              "TP": {"type": "number", "default": 0},
+              "P": {"type": "number", "default": 0},
+              "M": {"type": "number", "default": 0},
+              "G": {"type": "number", "default": 0},
+              "TG": {"type": "number", "default": 0}
+            }
+          },
+          "manivelle": {
+            "type": "object",
+            "properties": {
+              "P": {"type": "number", "default": 0},
+              "M": {"type": "number", "default": 0},
+              "G": {"type": "number", "default": 0},
+              "TG": {"type": "number", "default": 0}
+            }
+          },
+          "guillotine_simple": {
+            "type": "object",
+            "properties": {
+              "P": {"type": "number", "default": 0},
+              "M": {"type": "number", "default": 0},
+              "G": {"type": "number", "default": 0}
+            }
+          },
+          "guillotine_double": {
+            "type": "object",
+            "properties": {
+              "P": {"type": "number", "default": 0},
+              "M": {"type": "number", "default": 0},
+              "G": {"type": "number", "default": 0}
+            }
+          },
+          "couissante_simple": {
+            "type": "object",
+            "properties": {
+              "TP": {"type": "number", "default": 0},
+              "P": {"type": "number", "default": 0},
+              "M": {"type": "number", "default": 0},
+              "G": {"type": "number", "default": 0},
+              "SS": {"type": "number", "default": 0}
+            }
+          },
+          "couissante_double": {
+            "type": "object",
+            "properties": {
+              "TP": {"type": "number", "default": 0},
+              "P": {"type": "number", "default": 0},
+              "M": {"type": "number", "default": 0},
+              "G": {"type": "number", "default": 0},
+              "SS": {"type": "number", "default": 0}
+            }
+          },
+          "francaise": {"type": "number", "default": 0},
+          "puit_de_lumiere": {
+            "type": "object",
+            "properties": {
+              "P": {"type": "number", "default": 0},
+              "M": {"type": "number", "default": 0},
+              "G": {"type": "number", "default": 0}
+            }
+          },
+          "porte_coulissante": {
+            "type": "object",
+            "properties": {
+              "S": {"type": "number", "default": 0},
+              "D": {"type": "number", "default": 0}
+            }
+          },
+          "vider_les_gouttiere": {
+            "type": "object",
+            "properties": {
+              "Facile": {"type": "number", "default": 0},
+              "Moyen": {"type": "number", "default": 0},
+              "Difficile": {"type": "number", "default": 0}
+            }
+          },
+          "laver_soffites": {"type": "number", "default": 0},
+          "installation_de_plaques": {"type": "number", "default": 0},
+          "ampoules": {
+            "type": "object",
+            "properties": {
+              "rdc": {"type": "number", "default": 0},
+              "etage": {"type": "number", "default": 0}
+            }
+          },
+          "nettoyage_de_lumiere": {"type": "number", "default": 0},
+          "lavage_a_pression": {
+            "type": "object",
+            "properties": {
+              "sols": {
+                "type": "object",
+                "properties": {
+                  "asphalte": {"type": "number", "default": 0},
+                  "beton": {"type": "number", "default": 0}
+                }
+              },
+              "murs": {"type": "number", "default": 0},
+              "bois": {
+                "type": "object",
+                "properties": {
+                  "sols": {"type": "number", "default": 0},
+                  "cloture": {"type": "number", "default": 0},
+                  "escalier": {"type": "number", "default": 0},
+                  "rampes": {"type": "number", "default": 0}
+                }
+              },
+              "pave_seulment": {"type": "number", "default": 0},
+              "pave_sable_g": {"type": "number", "default": 0},
+              "pave_sable_p": {"type": "number", "default": 0}
+            }
+          },
+          "nettoyage_de_murs": {
+            "type": "object",
+            "properties": {
+              "P": {"type": "number", "default": 0},
+              "M": {"type": "number", "default": 0},
+              "G": {"type": "number", "default": 0}
+            }
+          },
+          "nettoyage_de_stores": {
+            "type": "object",
+            "properties": {
+              "P": {"type": "number", "default": 0},
+              "M": {"type": "number", "default": 0},
+              "G": {"type": "number", "default": 0}
+            }
+          },
+          "travaux_vip_heure": {"type": "number", "default": 0}
+        }
+      }
+    },
+    "required": ["prospect_info", "service_details"]
+  }
+}

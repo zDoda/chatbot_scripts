@@ -10,7 +10,7 @@ assistant_id = "asst_ZuM9sbc1LKdFADFYl7IPhZt7"
 def chat_completion(prompt: str) -> str:
     try:
         completion = client.chat.completions.create(
-            model="gpt-3.5-turbo-1106",
+            model="gpt-3.5-turbo-0125",
             messages=[
                 {"role": "system", "content": "You are a helpful assistant."},
                 {"role": "user", "content": prompt}
@@ -76,6 +76,43 @@ def wait_on_run(run, thread: str):
     return run
 
 
+def assistant_estimate_chat(msg: str, sender_id: str, senders: dict) -> str:
+    _ = client.beta.threads.messages.create(
+        thread_id=senders[sender_id]['thread'],
+        role="user",
+        content=msg
+    )
+
+    run = client.beta.threads.runs.create(
+        thread_id=senders[sender_id]['thread'],
+        assistant_id=assistant_id
+    )
+
+    run = wait_on_run(run, senders[sender_id]['thread'])
+    response = ""
+
+    if run.model_dump()['status'] == 'requires_action':
+        function_name = run.model_dump(
+        )['required_action']['submit_tool_outputs']['tool_calls'][0]['function']['name']
+        tool_id = run.model_dump(
+        )['required_action']['submit_tool_outputs']['tool_calls'][0]['id']
+
+        if function_name == "send_estimate":
+            response = "Chat has been reset"
+            messages = client.beta.threads.runs.submit_tool_outputs(
+                thread_id=senders[sender_id]['thread'],
+                run_id=run.id,
+                tool_outputs=[{"tool_call_id": tool_id, "output": response}]
+            )
+    else:
+        messages = client.beta.threads.messages.list(
+            thread_id=senders[sender_id]['thread']
+        )
+        message_json = messages.model_dump()
+        response = message_json['data'][0]['content'][0]['text']['value']
+    return response
+
+
 def delete_assistants():
     my_assistants = client.beta.assistants.list(
         order="desc",
@@ -106,4 +143,3 @@ def delete_files():
         _id = str(file['id'])
         print(_id)
         client.files.delete(_id)
-

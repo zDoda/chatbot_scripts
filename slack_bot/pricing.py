@@ -224,7 +224,7 @@ Chaque Catégorie JSON:
             "cloture": 0,
             "escalier": 0,
             "rampes": 0
-        }3.5-turbo,
+        },
         "pave_seulment": 0,
         "pave_sable_g": 0,
         "pave_sable_p": 0

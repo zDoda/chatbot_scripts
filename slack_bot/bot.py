@@ -251,6 +251,7 @@ async def add_prospect_task(data):
         'zipcode': '33710',
         'email': 'johndoe@gmail.com'
     }
+    </exampe_json>
     '''
 
     data = json.loads(openai_api.openai_json(add_prospect_prompt, text))
@@ -259,11 +260,10 @@ async def add_prospect_task(data):
     response = requests.post(url, json=data)
     response_code = response.status_code
 
-    # Determine if the request passed or failed based on the response code
     _tmp = ""
-    if response_code == 200:  # HTTP 200 OK means success
+    if response_code == 200:
         _tmp = "La requête a réussi"
-    elif response_code == 201:  # HTTP 201 Created is also a success status for POST requests
+    elif response_code == 201:
         _tmp = "La requête a été créée avec succès"
     else:
         _tmp = "La requête a échoué avec le code d'état {response_code}"
