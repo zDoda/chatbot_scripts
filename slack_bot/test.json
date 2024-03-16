@@ -1,0 +1,16 @@
+{
+  "name": "unanswered_question",
+  "description": "Provides a question that was not answered due to lack of information in the knowledge base",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "user_question": {
+        "type": "string",
+        "description": "The question posed by the user that couldn't be answered"
+      }
+    },
+    "required": [
+      "user_question"
+    ]
+  }
+}

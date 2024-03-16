@@ -68,38 +68,38 @@ def estimate():
 def print_helper(num, price, price2, header, header2="", header3=""):
     global estimate_str
     if header3 != "" and header2 != "":
-        estimate_str[0] += (str(header) + " - " + str(header2) + " - " + str(header3)
-                            + ":\n"
+        estimate_str[0] += ("\t - " + str(header) + " - " + str(header2) + " - " + str(header3)
+                            + ":  "
                             + " (# of Windows: " + str(num)
                             + " + Price: " + str(price)
                             + " = " + f'{num*price:.2f}' + " )\n")
 
-        estimate_str[1] += (str(header) + " - " + str(header2) + " - " + str(header3)
-                            + ":\n"
+        estimate_str[1] += ("\t - " + str(header) + " - " + str(header2) + " - " + str(header3)
+                            + ":  "
                             + " (# of Windows: " + str(num)
                             + " + Price: " + str(price2)
                             + " = " + f'{num*price2:.2f}' + " )\n")
 
     elif header2 != "":
-        estimate_str[0] += (str(header) + " - " + str(header2)
-                            + ":\n"
+        estimate_str[0] += ("\t - " + str(header) + " - " + str(header2)
+                            + ":  "
                             + " (# of Windows: " + str(num)
                             + " + Price: " + str(price)
                             + " = " + f'{num*price:.2f}' + " )\n")
 
-        estimate_str[1] += (str(header) + " - " + str(header2)
-                            + ":\n"
+        estimate_str[1] += ("\t - " + str(header) + " - " + str(header2)
+                            + ":  "
                             + " (# of Windows: " + str(num)
                             + " + Price: " + str(price)
                             + " = " + f'{num*price2:.2f}' + " )\n")
 
     else:
-        estimate_str[0] += (str(header) + ":\n"
+        estimate_str[0] += ("\t - " + str(header) + ":  "
                             + " (# of Windows: " + str(num)
                             + " + Price: " + str(price)
                             + " = " + f'{num*price:.2f}' + " )\n")
 
-        estimate_str[1] += (str(header) + ":\n"
+        estimate_str[1] += ("\t - " + str(header) + ":  "
                             + " (# of Windows: " + str(num)
                             + " + Price: " + str(price2)
                             + " = " + f'{num*price2:.2f}' + " )\n")
@@ -183,7 +183,7 @@ def estimate_tax(user_id):
         pricing_dir['tax']['tvq']*estimate_user_dir[str(user_id)]['both'])
     ext_tax = (pricing_dir['tax']['tps']*estimate_user_dir[str(user_id)]['ext']) + (
         pricing_dir['tax']['tvq']*estimate_user_dir[str(user_id)]['ext'])
-    return (ext_tax+estimate_user_dir[str(user_id)]['ext'], both_tax+estimate_user_dir[str(user_id)]['both'])
+    return (ext_tax, both_tax)
 
 
 async def estimate_task(data):
@@ -199,19 +199,21 @@ async def estimate_task(data):
     print_estimate(channel_id, user_id)
 
 
-def print_estimate(channel_id, user_id):
-    ext_total, both_total = estimate_tax(user_id)
+def print_estimate(user_id) -> str:
+    ext_tax, both_tax = estimate_tax(user_id)
     _tmp = ""
-    _tmp += "External Only: \n" + \
-        estimate_str[0] + \
-            f"Ext: {estimate_user_dir[str(user_id)]['ext']:.2f},w/ Tax: {ext_total:.2f}\n"
-    _tmp += "External & Internal:  \n" + \
+    _tmp += "\t*External Only*:\n" + \
+        estimate_str[0]
+    _tmp += "\t*External & Internal*:\n" + \
         estimate_str[1] + \
-            f"Ext+Int: {estimate_user_dir[str(user_id)]['both']:.2f}\n w/ Tax: {both_total:.2f}"
-    client.chat_postMessage(
-        channel=channel_id,
-        text=_tmp
-    )
+        "\t*TOTAL*:\n" + \
+        f"\t\tExternal Only: {estimate_user_dir[str(user_id)]['ext']:.2f} + Tax: {ext_tax:.2f}" + \
+        f" = *{(estimate_user_dir[str(user_id)]['ext']+ext_tax):.2f}*\n" + \
+        f"\t\tExternal & Internal: {estimate_user_dir[str(user_id)]['both']:.2f} + Tax: {both_tax:.2f}" + \
+        f" = *{(estimate_user_dir[str(user_id)]['both']+both_tax):.2f}*\n"
+    if 'unknown' in estimate_user_dir[str(user_id)]:
+        f"\tUnknown Items: {estimate_user_dir[str(user_id)]['unknown']}"
+    return _tmp
 
 
 # Add a prospect to CRM
@@ -272,6 +274,21 @@ async def add_prospect_task(data):
         channel=channel_id,
         text=_tmp
     )
+
+
+def print_prospect(data, user_id) -> str:
+    return f'''
+    - Customer Type: {'Commercial' if 'company_name' in data else 'Residential'}\n
+    - First Name: {data['first_name']}\n
+    - Last Name: {data['last_name']}\n
+    - Email: {data['email']}\n
+    - Phone: {data['phone']}\n
+    - Address: {data['address']}\n
+    - City: {data['city']}\n
+    - State/Province: {data['state_province']}\n
+    - Zipcode: {data['zipcode']}\n
+    - Marketing Source: <@{user_id}>\n
+    '''
 
 
 if __name__ == "__main__":
